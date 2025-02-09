@@ -1,0 +1,1 @@
+-- Initial empty migration for version 0
