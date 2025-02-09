@@ -1,1 +1,13 @@
 /snippetbox
+# Ignore enviroment variables
+greenlight-api/.envrc
+
+# Ignore Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Ignore build directory
+greenlight-api/bin
