@@ -10,4 +10,4 @@ greenlight-api/.envrc
 *.dylib
 
 # Ignore build directory
-greenlight-api/bin
+greenlight-api/bin/
