@@ -1,1 +1,0 @@
--- Down script for version 0 (no actions)
