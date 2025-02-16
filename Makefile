@@ -90,4 +90,29 @@ production_host_ip = '167.99.142.177'
 ## production/connect: connect to the production server
 .PHONY: production/connect
 production/connect:
-	ssh -i C:/Users/lukas/digitalocean/.ssh/id_rsa greenlight@${production_host_ip}
+	ssh greenlight@${production_host_ip}
+
+## production/deploy/api: deploy the api to production
+.PHONY: production/deploy/api
+production/deploy/api:
+	scp -r D:/Projekty/go-alex/bin/linux_amd64/api greenlight@${production_host_ip}:/home/greenlight/migrations
+    ssh -t greenlight@${production_host_ip} 'migrate -path /home/greenlight/migrations -database $$GREENLIGHT_DB_DSN up'
+
+## production/configure/api.service: configure the production systemd api.service file
+.PHONY: production/configure/api.service
+production/configure/api.service:
+	scp -r D:/Projekty/go-alex/remote/production/api.service greenlight@${production_host_ip}:/home/greenlight/
+	ssh -t greenlight@${production_host_ip} '\
+		sudo mv ~/api.service /etc/systemd/system/ \
+		&& sudo systemctl enable api \
+		&& sudo systemctl restart api \
+	'
+
+## production/configure/caddyfile: configure the production Caddyfile
+.PHONY: production/configure/caddyfile
+production/configure/caddyfile:
+	scp -r D:/Projekty/go-alex/remote/production/Caddyfile greenlight@${production_host_ip}:/home/greenlight/
+	ssh -t greenlight@${production_host_ip} '\
+		sudo mv ~/Caddyfile /etc/caddy/ \
+		&& sudo systemctl reload caddy \
+	'
